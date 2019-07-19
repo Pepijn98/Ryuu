@@ -69,7 +69,7 @@ namespace Ryuu
 
             _client.Log += Log;
 
-            var cki = Console.ReadKey(true);
+            /*var cki = Console.ReadKey(true);
 
             if (cki.Key == ConsoleKey.Escape || cki.Key == ConsoleKey.X)
             {
@@ -80,7 +80,7 @@ namespace Ryuu
                 await _client.StopAsync();
 
                 Environment.Exit(0);
-            }
+            }*/
 
             await Task.Delay(-1);
         }
