@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Discord;
 using Discord.Addons.Interactive;
 using Discord.Commands;
@@ -47,7 +48,7 @@ namespace Ryuu.Modules
 
             var embed = new EmbedBuilder
             {
-                ImageUrl = $"https://nekos.brussell.me/image/{catgirlId}",
+                ImageUrl = $"https://nekos.moe/image/{catgirlId}",
                 Color = new Color(ConfigHandler.Config.EmbedColor)
             }.Build();
             

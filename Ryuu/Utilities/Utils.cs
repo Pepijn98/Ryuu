@@ -61,7 +61,7 @@ namespace Ryuu.Utilities
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             client.DefaultRequestHeaders.Add("User-Agent", UserAgent);
 
-            var json = await client.GetStringAsync(nsfw ? "https://nekos.brussell.me/api/v1/random/image?count=1&nsfw=true" : "https://nekos.brussell.me/api/v1/random/image?count=1&nsfw=false");
+            var json = await client.GetStringAsync(nsfw ? "https://nekos.moe/api/v1/random/image?count=1&nsfw=true" : "https://nekos.moe/api/v1/random/image?count=1&nsfw=false");
 
             CatgirlModel catgirl;
             try
