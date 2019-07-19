@@ -1,0 +1,7 @@
+.idea
+Ryuu/obj
+Ryuu/bin
+Ryuu/data
+Ryuu/Handlers/ConfigHandler.cs
+Ryuu/Interfaces/IConfig.cs
+Ryuu/Models/ConfigModel.cs
