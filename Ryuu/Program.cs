@@ -13,6 +13,23 @@ namespace Ryuu
         private static DiscordShardedClient _client;
         private static CommandHandler _command;
         private static DiscordSocketConfig _config;
+        
+        private static bool? _consolePresent;
+        private  static bool ConsolePresent {
+            get {
+                if (_consolePresent != null) return _consolePresent.Value;
+                _consolePresent = true;
+                try
+                {
+                    var unused = Console.ReadKey(true);
+                }
+                catch
+                {
+                    _consolePresent = false;
+                }
+                return _consolePresent.Value;
+            }
+        }
 
         public const string PlayingStatus = "@{username} help | <prefix> help";
 
@@ -69,18 +86,20 @@ namespace Ryuu
 
             _client.Log += Log;
 
-            /*var cki = Console.ReadKey(true);
-
-            if (cki.Key == ConsoleKey.Escape || cki.Key == ConsoleKey.X)
+            if (ConsolePresent)
             {
-                await _client.SetGameAsync("");
-                await _client.SetStatusAsync(UserStatus.Invisible);
+                var cki = Console.ReadKey(true);
+                if (cki.Key == ConsoleKey.Escape || cki.Key == ConsoleKey.X)
+                {
+                    await _client.SetGameAsync("");
+                    await _client.SetStatusAsync(UserStatus.Invisible);
                 
-                await _client.LogoutAsync();
-                await _client.StopAsync();
+                    await _client.LogoutAsync();
+                    await _client.StopAsync();
 
-                Environment.Exit(0);
-            }*/
+                    Environment.Exit(0);
+                }
+            }
 
             await Task.Delay(-1);
         }
