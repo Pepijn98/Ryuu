@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using Discord;
 using Discord.Addons.Interactive;
 using Discord.Commands;
@@ -61,17 +63,40 @@ namespace Ryuu.Modules
         {
             // TODO: Show more info about the anime in the embed
 
-            var anime = await Anime.GetAnimeAsync(args);
-            
-            var embed = new EmbedBuilder
+            try
             {
-                Color = new Color(ConfigHandler.Config.EmbedColor),
-                Title = anime.Data[0].Attributes.CanonicalTitle ?? anime.Data[0].Attributes.Titles.JaJp,
-                Description = anime.Data[0].Attributes.Synopsis,
-                ThumbnailUrl = anime.Data[0].Attributes.PosterImage.Medium
-            }.Build();
-            
-            await ReplyAsync("", embed: embed);
+                // var animes = new List<string>();
+                var res = await Anime.GetAnimeAsync(args);
+                var anime = res.Data[0];
+                /*foreach (var anime in res.Data)
+                {
+                    var str = $"**{anime.Attributes.CanonicalTitle ?? anime.Attributes.Titles.JaJp}**\n" +
+                              $"{anime.Attributes.Synopsis ?? "-"}\n\n" +
+                              $"{anime.Attributes.PosterImage.Medium}";
+                    animes.Add(str);
+                }*/
+                
+                var embed = new EmbedBuilder
+                {
+                    Color = new Color(ConfigHandler.Config.EmbedColor),
+                    Title = anime.Attributes.CanonicalTitle ?? anime.Attributes.Titles.JaJp,
+                    ThumbnailUrl = anime.Attributes.PosterImage.Medium,
+                    Description = anime.Attributes.Synopsis ?? "-"
+                }.Build();
+
+                await ReplyAsync("", embed: embed);
+                // await PagedReplyAsync(animes);
+            }
+            catch (Exception e)
+            {
+                var embed = new EmbedBuilder
+                {
+                    Color = new Color(0xFF0000),
+                    Description = e.Message
+                }.Build();
+                await ReplyAsync("", embed: embed);
+                throw;
+            }
         }
         [Command("anime", RunMode = RunMode.Async)]
         [Summary("Shows info about the given anime by its id")]

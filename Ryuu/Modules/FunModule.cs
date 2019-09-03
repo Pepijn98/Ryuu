@@ -1,10 +1,11 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Discord;
 using Discord.Addons.Interactive;
 using Discord.Commands;
 using IMDBCore;
 using MtgApiManager.Lib.Service;
-using PokeAPI;
+// using PokeAPI;
 using Ryuu.Handlers;
 using Ryuu.Utilities;
 
@@ -36,23 +37,36 @@ namespace Ryuu.Modules
         {
             // TODO: Show more info about the movie in the embed
 
-            var movie = await _imdb.GetMovieAsync(args);
-
-            if (movie.Error != null)
+            try
             {
-                await ReplyAsync(movie.Error);
-                return;
-            }
+                var movie = await _imdb.GetMovieAsync(args);
+
+                if (movie.Error != null)
+                {
+                    await ReplyAsync(movie.Error);
+                    return;
+                }
             
-            var embed = new EmbedBuilder
-            {
-                Color = new Color(ConfigHandler.Config.EmbedColor),
-                Title = movie.Title,
-                Description = $"{movie.ImdbId}\n{movie.Plot}",
-                ThumbnailUrl = movie.Poster
-            }.Build();
+                var embed = new EmbedBuilder
+                {
+                    Color = new Color(ConfigHandler.Config.EmbedColor),
+                    Title = movie.Title,
+                    Description = $"{movie.ImdbId}\n{movie.Plot}",
+                    ThumbnailUrl = movie.Poster
+                }.Build();
 
-            await ReplyAsync("", embed: embed);
+                await ReplyAsync("", embed: embed);
+            }
+            catch (Exception e)
+            {
+                var embed = new EmbedBuilder
+                {
+                    Color = new Color(0xFF0000),
+                    Description = e.Message
+                };
+                await ReplyAsync("", embed: embed.Build());
+                throw;
+            }
         }
         
         [Command("mtg", RunMode = RunMode.Async)]
@@ -105,23 +119,38 @@ namespace Ryuu.Modules
             }
         }
         
+        /*
         [Command("pokemon", RunMode = RunMode.Async)]
         [Summary("Show pokemon info")]
         [RequireBotPermission(ChannelPermission.SendMessages | ChannelPermission.EmbedLinks)]
         public async Task PokemonAsync([Remainder, Name("pokemon_name")] string args)
         {
             // TODO: Add more pokemon info to the embed
-            
-            var pokemon = await DataFetcher.GetNamedApiObject<PokemonSpecies>(args);
 
-            var embed = new EmbedBuilder
+            try
             {
-                Color = new Color(ConfigHandler.Config.EmbedColor),
-                Title = pokemon.Name,
-                Description = pokemon.Descriptions[0].Text
-            };
+                var pokemon = await DataFetcher.GetApiObject<Pokemon>(args)
+                
+                var embed = new EmbedBuilder
+                {
+                    Color = new Color(ConfigHandler.Config.EmbedColor),
+                    Title = pokemon.Name,
+                    ThumbnailUrl = pokemon.Sprites.FrontDefault
+                };
 
-            await ReplyAsync("", embed: embed.Build());
+                await ReplyAsync("", embed: embed.Build());
+            }
+            catch (Exception e)
+            {
+                var embed = new EmbedBuilder
+                {
+                    Color = new Color(0xFF0000),
+                    Description = e.Message
+                };
+                await ReplyAsync("", embed: embed.Build());
+                throw;
+            }
         }
+        */
     }
 }
