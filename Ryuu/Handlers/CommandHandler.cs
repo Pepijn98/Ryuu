@@ -19,7 +19,7 @@ namespace Ryuu.Handlers
         public async Task Install(DiscordShardedClient c)
         {
             _client = c;
-            
+
             var services = new ServiceCollection()
                 .AddSingleton<Random>()
                 .AddSingleton(_client);

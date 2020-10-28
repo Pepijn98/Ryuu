@@ -6,6 +6,7 @@ using Discord.Commands;
 using Discord.WebSocket;
 using Ryuu.Handlers;
 
+// ReSharper disable UnusedType.Global
 // ReSharper disable UnusedMember.Global
 
 namespace Ryuu.Modules

@@ -14,13 +14,13 @@ namespace Ryuu.Handlers
         private const string ConfigPath = "data/Blacklist.json";
 
         private static async Task SaveAsync<T>(Dictionary<ulong, T> configs) where T : IBlacklist
-            => File.WriteAllText(ConfigPath, await Task.Run(() => JsonConvert.SerializeObject(configs, Formatting.Indented)).ConfigureAwait(false));
+            => await File.WriteAllTextAsync(ConfigPath, await Task.Run(() => JsonConvert.SerializeObject(configs, Formatting.Indented)).ConfigureAwait(false));
 
         public static async Task<Dictionary<ulong, T>> LoadBlacklistAsync<T>() where T : IBlacklist, new()
         {
             if (File.Exists(ConfigPath))
             {
-                return JsonConvert.DeserializeObject<Dictionary<ulong, T>>(File.ReadAllText(ConfigPath));
+                return JsonConvert.DeserializeObject<Dictionary<ulong, T>>(await File.ReadAllTextAsync(ConfigPath));
             }
 
             var newConfig = new Dictionary<ulong, T>();

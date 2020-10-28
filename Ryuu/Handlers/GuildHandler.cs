@@ -14,13 +14,13 @@ namespace Ryuu.Handlers
         private const string ConfigPath = "data/GuildConfig.json";
 
         public static async Task SaveAsync<T>(Dictionary<ulong, T> configs) where T : IServer
-            => File.WriteAllText(ConfigPath, await Task.Run(() => JsonConvert.SerializeObject(configs, Formatting.Indented)).ConfigureAwait(false));
+            => await File.WriteAllTextAsync(ConfigPath, await Task.Run(() => JsonConvert.SerializeObject(configs, Formatting.Indented)).ConfigureAwait(false));
 
         public static async Task<Dictionary<ulong, T>> LoadServerConfigsAsync<T>() where T : IServer, new()
         {
             if (File.Exists(ConfigPath))
             {
-                return JsonConvert.DeserializeObject<Dictionary<ulong, T>>(File.ReadAllText(ConfigPath));
+                return JsonConvert.DeserializeObject<Dictionary<ulong, T>>(await File.ReadAllTextAsync(ConfigPath));
             }
             var newConfig = new Dictionary<ulong, T>();
             await SaveAsync(newConfig);

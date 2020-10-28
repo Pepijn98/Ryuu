@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using Discord;
 using Discord.Addons.Interactive;
@@ -9,6 +8,7 @@ using Kitsu.Manga;
 using Ryuu.Handlers;
 using Ryuu.Utilities;
 
+// ReSharper disable UnusedType.Global
 // ReSharper disable UnusedMember.Global
 
 namespace Ryuu.Modules

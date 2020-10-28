@@ -16,6 +16,7 @@ using Microsoft.CodeAnalysis.CSharp.Scripting;
 using Microsoft.CodeAnalysis.Scripting;
 using Ryuu.Utilities;
 
+// ReSharper disable UnusedType.Global
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable UnusedMember.Global
 // ReSharper disable MemberCanBePrivate.Global
@@ -79,8 +80,8 @@ namespace Ryuu.Modules
                 }
             };
             process.Start();
-            var stdOut = process.StandardOutput.ReadToEnd();
-            var stdErr = process.StandardError.ReadToEnd();
+            var stdOut = await process.StandardOutput.ReadToEndAsync();
+            var stdErr = await process.StandardError.ReadToEndAsync();
             process.WaitForExit();
             
             if (stdErr != "")
@@ -102,15 +103,14 @@ namespace Ryuu.Modules
             const string codeBlockRegex = @"\`\`\`(?:(\S+?)[\n ])?\n*(?s:(.+?))\n*\`\`\`";
             if (Regex.IsMatch(code, codeBlockRegex, RegexOptions.Compiled | RegexOptions.Multiline))
             {
-                code =
-                    $"{Regex.Match(code, codeBlockRegex, RegexOptions.Compiled | RegexOptions.Multiline).Groups[2]}";
+                code = $"{Regex.Match(code, codeBlockRegex, RegexOptions.Compiled | RegexOptions.Multiline).Groups[2]}";
             }
-            var assemblies = Assembly.GetEntryAssembly().GetReferencedAssemblies().Select(Assembly.Load).ToList();
-            assemblies.Add(Assembly.GetEntryAssembly());
+            var assemblies = Assembly.GetEntryAssembly()?.GetReferencedAssemblies().Select(Assembly.Load).ToList();
+            assemblies?.Add(Assembly.GetEntryAssembly());
             
             var scriptOptions = ScriptOptions.Default
-                .WithReferences(assemblies.Select(x => MetadataReference.CreateFromFile(x.Location)))
-                .WithImports(Assembly.GetEntryAssembly().GetTypes().Select(x => x.Namespace).Distinct());
+                .WithReferences(assemblies?.Select(x => MetadataReference.CreateFromFile(x.Location)))
+                .WithImports(Assembly.GetEntryAssembly()?.GetTypes().Select(x => x.Namespace).Distinct());
             
             var embed = new EmbedBuilder()
                 .WithTitle("Evaluate Code")
@@ -124,14 +124,12 @@ namespace Ryuu.Modules
                     Client = Context.Client,
                     Context = Context
                 }, typeof(EvaluateObject));
-                embed.WithTitle("Completed")
-                    .WithDescription($"Result: {result ?? "none"}");
+                embed.WithTitle("Completed").WithDescription($"Result: {result ?? "none"}");
                 await message.ModifyAsync(x => x.Embed = embed.Build());
             }
             catch (Exception e)
             {
-                embed.WithTitle("Failure")
-                    .WithDescription($"Reason: {e.Message ?? e.InnerException.Message}");
+                embed.WithTitle("Failure").WithDescription($"Reason: {e.Message}");
                 await message.ModifyAsync(x => x.Embed = embed.Build());
             }
             finally

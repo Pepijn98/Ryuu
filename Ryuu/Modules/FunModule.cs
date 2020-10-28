@@ -9,6 +9,7 @@ using MtgApiManager.Lib.Service;
 using Ryuu.Handlers;
 using Ryuu.Utilities;
 
+// ReSharper disable UnusedType.Global
 // ReSharper disable UnusedMember.Global
 
 namespace Ryuu.Modules

@@ -11,7 +11,7 @@ namespace Ryuu.Utilities
 {
     public static class Utils
     {
-        internal const string UserAgent = "Ryuu/v0.0.1 - (https://github.com/KurozeroPB/Ryuu)";
+        internal const string UserAgent = "Ryuu/v1.0.0 - (https://github.com/Pepijn98/Ryuu)";
         
         public static string CurrentDate()
         {
